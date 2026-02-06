@@ -35,13 +35,23 @@ router.post('/api/ocr', upload.single('file'), async (req, res) => {
     console.log('Pages:', data.numpages);
     console.log('Text length:', data.text.length);
 
+    const leaseTerms = {
+      rent: extractAmount(data.text),
+      leaseTerm: extractLeaseTerm(data.text),
+      securityDeposit: extractAmount(data.text),
+      lateFees: extractAmount(data.text),
+      pets: extractPetPolicy(data.text),
+      subletting: extractSublettingPolicy(data.text)
+    };
+
     res.json({
       success: true,
       text: data.text,
       info: {
         pages: data.numpages,
         info: data.info
-      }
+      },
+      leaseTerms: leaseTerms
     });
   } catch (error) {
     console.error('❌ Error parsing PDF:', error);
@@ -51,5 +61,47 @@ router.post('/api/ocr', upload.single('file'), async (req, res) => {
     });
   }
 });
+
+function extractAmount(text) {
+  const match = text.match(/\$?\s*[\d,]+/);
+  if (match) {
+    return match[0].replace(/[\$,]/g, '');
+  }
+  return null;
+}
+
+function extractLeaseTerm(text) {
+  const match = text.match(/term\s*[:\s]*(\d+)\s*(month|year|months)/i);
+  if (match) {
+    return `${match[0]} ${match[1]}${match[2]}`;
+  }
+  return null;
+}
+
+function extractPetPolicy(text) {
+  if (/no\s*pets/i.test(text)) {
+    return 'Not allowed';
+  }
+  if (/pets?\s*allowed/i.test(text)) {
+    return 'Allowed with restrictions';
+  }
+  if (/pet\s*allowed/i.test(text)) {
+    return 'Allowed';
+  }
+  return null;
+}
+
+function extractSublettingPolicy(text) {
+  if (/no\s*subletting/i.test(text)) {
+    return 'Not allowed';
+  }
+  if (/subletting?\s*allowed/i.test(text)) {
+    return 'Allowed with restrictions';
+  }
+  if (/subletting?\s*allowed/i.test(text)) {
+    return 'Allowed with landlord approval';
+  }
+  return null;
+}
 
 module.exports = router;
