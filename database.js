@@ -2,10 +2,11 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 
-const dbPath = path.join(__dirname, 'qiyoga.db');
-const db = new sqlite3.Database(dbPath);
+let db = null;
 
-function initializeDatabase() {
+function initializeDatabase(dbPath) {
+  db = new sqlite3.Database(dbPath);
+
   db.serialize(() => {
     db.run(`
       CREATE TABLE IF NOT EXISTS transactions (
@@ -29,6 +30,13 @@ function initializeDatabase() {
         access_granted_at DATETIME,
         access_expires_at DATETIME,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS user_access_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT,
+        customer_email TEXT,
+        granted_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
     `);
   });

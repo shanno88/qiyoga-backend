@@ -1,10 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const ocrRouter = require('./routes/ocr');
 const paddleVerify = require('./middleware/paddleVerify');
 const db = require('./database');
+
+// 定义数据库路径
+const dbPath = process.env.DB_PATH || path.join(__dirname, 'database.sqlite');
+console.log('📊 Database path:', dbPath);
 
 const app = express();
 
@@ -115,7 +120,7 @@ app.use((req, res) => {
   });
 });
 
-db.initializeDatabase();
+db.initializeDatabase(dbPath);
 
 app.listen(PORT, () => {
   console.log('\n🚀 QiYoga Backend is running!');
