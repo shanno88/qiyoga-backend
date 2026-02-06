@@ -1,0 +1,19 @@
+{
+  "name": "paddle-backend",
+  "version": "1.0.0",
+  "description": "Paddle webhook handler for QiYoga payments",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "test": "node test-webhook.js http://localhost:3001/webhook/paddle"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
