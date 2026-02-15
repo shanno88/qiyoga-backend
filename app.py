@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-# 修复：修改导入路径
 from routes import lease_routes, billing_routes
 
 app = FastAPI(

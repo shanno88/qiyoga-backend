@@ -45,7 +45,7 @@ Receives Paddle webhook notifications. Automatically verifies signature.
 
 ### PDF OCR
 ```
-POST /api/ocr
+POST /api/lease/analyze
 Content-Type: multipart/form-data
 ```
 Upload a PDF file to extract text.
@@ -113,7 +113,7 @@ curl http://localhost:3001/health
 
 ### Test OCR Endpoint
 ```bash
-curl -X POST http://localhost:3001/api/ocr \
+curl -X POST http://localhost:3001/api/lease/analyze \
   -F "file=@lease.pdf"
 ```
 
@@ -189,12 +189,12 @@ The project includes:
 
 ## Paddle Configuration
 
-Use the following Paddle credentials:
+Configure your Paddle credentials in the `.env` file:
 
-- **Seller ID**: 275543
-- **Client-side Token**: live_c93653afe91caaa9f5ad6a0d4da
-- **Price ID**: pri_01kgrhp2wrthebpgwmn8eh5ssy
-- **Product ID**: pro_01kgrhkyabt3244vn6hqgj3ype
+- **Seller ID**: Your Paddle seller ID
+- **Client-side Token**: Your Paddle client-side token (from Paddle Dashboard)
+- **Price ID**: Your price ID
+- **Product ID**: Your product ID
 
 ### Webhook Events
 
@@ -236,7 +236,7 @@ Configure these events in Paddle:
 ### 404 errors
 - Verify endpoint paths are correct:
   - `/webhook/paddle`
-  - `/api/ocr`
+  - `/api/lease/analyze`
   - `/health`
 - Check server is running on correct port
 

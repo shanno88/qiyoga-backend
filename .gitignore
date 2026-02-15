@@ -1,5 +1,15 @@
 node_modules/
 .env
+.env.*
+!.env.example
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.sqlite
+*.sqlite3
+database.sqlite
 uploads/
 *.log
 npm-debug.log*
